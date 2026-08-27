@@ -1,3 +1,6 @@
+@extends('layouts.app')
+
+@section('content')
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -5,19 +8,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Developer Anggota - XI RPL 1</title>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: #f4f7f6;
-            color: #333;
-            padding: 40px 20px;
-        }
-
         .container {
             max-width: 900px;
             margin: 0 auto;
@@ -120,3 +110,4 @@
 
 </body>
 </html>
+@endsection

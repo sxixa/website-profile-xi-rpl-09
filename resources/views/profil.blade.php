@@ -1,13 +1,6 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profil & CRUD Anggota - XI RPL 1</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-slate-100 text-slate-800 font-sans min-h-screen p-8">
+@extends('layouts.app')
 
+@section('content')
     <div class="max-w-6xl mx-auto">
         <div class="text-center mb-8">
             <h1 class="text-3xl font-bold text-slate-800">Anggota Tim Developer</h1>
@@ -122,5 +115,4 @@
 
         renderCards();
     </script>
-</body>
-</html>
+@endsection
