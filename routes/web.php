@@ -2,6 +2,10 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/profile', function () {
+Route::get('/', function () {
     return view('profil');
+});
+
+Route::get('/kontak', function () {
+    return view('kontak');
 });
