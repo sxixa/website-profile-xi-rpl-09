@@ -16,3 +16,13 @@ Working Directory dan Staging Area dalam repository Git, untuk memantau perubaha
 Karena branch **Main** biasanya dianggap branch utama yang harus tetap stabil. Jadi tiap kontributor bisa testing dan debugging di branch masing-masing, sehingga project manager bisa review kode, membandingkan lalu merge pull request dari kontributor.
 
 **Apa perbedaan dari commit berikut?**<br>
+`git commit -m "update"` <br>
+dan <br>
+`git commit -m "Menambahkan halaman profil kelas"` <br>
+**Jawaban** <br>
+Beda commit message <br>
+
+*Mana yang lebih baik?* <br>
+
+Tentu saja yang terakhir karena messagenya informatif.
+
