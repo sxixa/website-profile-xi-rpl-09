@@ -1,5 +1,8 @@
 <?php
 
+// 1. MUST REQUIRE AUTOLOADER FIRST
+require __DIR__ . '/../vendor/autoload.php';
+
 // Prepare required writable folders in Vercel /tmp
 $storageDirs = [
     '/tmp/storage/framework/views',
@@ -20,9 +23,17 @@ if (!file_exists($dbFile)) {
     touch($dbFile);
 }
 
-// Bind custom storage path globally
+// 2. Load Laravel application
 $app = require_once __DIR__ . '/../bootstrap/app.php';
 $app->useStoragePath('/tmp/storage');
 
-// Forward execution to public/index.php using the configured app
-require __DIR__ . '/../public/index.php';
+// 3. Handle request
+$kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
+
+$response = $kernel->handle(
+    $request = Illuminate\Http\Request::capture()
+);
+
+$response->send();
+
+$kernel->terminate($request, $response);
