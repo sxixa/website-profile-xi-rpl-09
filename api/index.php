@@ -1,14 +1,12 @@
 <?php
 
-use Illuminate\Foundation\Application;
-use Illuminate\Http\Request;
+error_reporting(E_ALL);
+ini_set('display_errors', '1');
 
-define('LARAVEL_START', microtime(true));
+// 1. Require Autoloader
+require __DIR__ . '/../vendor/autoload.php';
 
-// 1. Register Autoloader
-require __DIR__.'/../vendor/autoload.php';
-
-// 2. Prepare writable /tmp directories before booting Laravel
+// 2. Create writable directories in Vercel's /tmp environment
 $storageDirs = [
     '/tmp/storage/framework/views',
     '/tmp/storage/framework/sessions',
@@ -23,18 +21,18 @@ foreach ($storageDirs as $dir) {
     }
 }
 
-// 3. Create SQLite database file if used
+// 3. Create SQLite DB file if needed
 $dbFile = '/tmp/database.sqlite';
 if (!file_exists($dbFile)) {
     touch($dbFile);
 }
 
-// 4. Bootstrap Laravel application
-/** @var Application $app */
-$app = require_once __DIR__.'/../bootstrap/app.php';
+// 4. Create Laravel Application Instance
+/** @var \Illuminate\Foundation\Application $app */
+$app = require_once __DIR__ . '/../bootstrap/app.php';
 
-// 5. Override storage path on the booted application
+// 5. Call useStoragePath on the instantiated Application object
 $app->useStoragePath('/tmp/storage');
 
-// 6. Handle the incoming request
-$app->handleRequest(Request::capture());
+// 6. Handle Request
+$app->handleRequest(\Illuminate\Http\Request::capture());
