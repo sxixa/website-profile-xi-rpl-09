@@ -5,7 +5,20 @@ use Illuminate\Http\Request;
 
 define('LARAVEL_START', microtime(true));
 
-// 1. Buat direktori sementara di /tmp Vercel
+// 1. Set environment variable dasar langsung dari PHP (Paling Awal)
+$_ENV['CACHE_STORE'] = 'array';
+$_ENV['SESSION_DRIVER'] = 'array';
+$_ENV['QUEUE_CONNECTION'] = 'sync';
+$_ENV['LOG_CHANNEL'] = 'stderr';
+$_ENV['DB_CONNECTION'] = 'sqlite';
+
+putenv('CACHE_STORE=array');
+putenv('SESSION_DRIVER=array');
+putenv('QUEUE_CONNECTION=sync');
+putenv('LOG_CHANNEL=stderr');
+putenv('DB_CONNECTION=sqlite');
+
+// 2. Buat direktori sementara di /tmp Vercel
 $dirs = [
     '/tmp/storage/framework/views',
     '/tmp/storage/framework/sessions',
@@ -20,24 +33,16 @@ foreach ($dirs as $dir) {
     }
 }
 
-// 2. Autoload & Bootstrap
+// 3. Autoload
 require __DIR__ . '/../vendor/autoload.php';
 
+// 4. Bootstrap Application
 /** @var Application $app */
 $app = require_once __DIR__ . '/../bootstrap/app.php';
 
-// 3. Set path storage ke /tmp
+// 5. Override Storage Path
 $app->useStoragePath('/tmp/storage');
 $app->useBootstrapPath('/tmp/bootstrap');
 
-// 4. OVERRIDE CONFIG (Solusi untuk ArgumentCountError)
-// Paksa Laravel menggunakan driver 'array' & 'file' tanpa butuh database
-$app->booted(function () use ($app) {
-    $app['config']->set('cache.default', 'array');
-    $app['config']->set('session.driver', 'array');
-    $app['config']->set('database.default', 'sqlite');
-    $app['config']->set('database.connections.sqlite.database', '/tmp/database.sqlite');
-});
-
-// 5. Jalankan Request
+// 6. Jalankan Request
 $response = $app->handleRequest(Request::capture());
