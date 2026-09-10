@@ -1,19 +1,40 @@
 <?php
-// Force PHP to show all errors directly on the screen
-error_reporting(E_ALL);
-ini_set('display_errors', '1');
-ini_set('display_startup_errors', '1');
 
-try {
-    // Check if vendor folder exists
-    if (!file_exists(__DIR__ . '/../vendor/autoload.php')) {
-        throw new Exception("Fatal Error: vendor/autoload.php is missing. Composer dependencies were not installed or packaged correctly.");
+use Illuminate\Foundation\Application;
+use Illuminate\Http\Request;
+
+define('LARAVEL_START', microtime(true));
+
+// 1. Register Autoloader
+require __DIR__.'/../vendor/autoload.php';
+
+// 2. Prepare writable /tmp directories before booting Laravel
+$storageDirs = [
+    '/tmp/storage/framework/views',
+    '/tmp/storage/framework/sessions',
+    '/tmp/storage/framework/cache/data',
+    '/tmp/storage/logs',
+    '/tmp/bootstrap/cache',
+];
+
+foreach ($storageDirs as $dir) {
+    if (!is_dir($dir)) {
+        mkdir($dir, 0755, true);
     }
-
-    require __DIR__ . '/../public/index.php';
-} catch (Throwable $e) {
-    echo "<h1 style='color: red;'>Laravel Startup Error:</h1>";
-    echo "<pre>" . htmlspecialchars($e->getMessage()) . "</pre>";
-    echo "<h3>File:</h3> " . htmlspecialchars($e->getFile()) . " on line " . $e->getLine();
-    echo "<h3>Stack Trace:</h3><pre>" . htmlspecialchars($e->getTraceAsString()) . "</pre>";
 }
+
+// 3. Create SQLite database file if used
+$dbFile = '/tmp/database.sqlite';
+if (!file_exists($dbFile)) {
+    touch($dbFile);
+}
+
+// 4. Bootstrap Laravel application
+/** @var Application $app */
+$app = require_once __DIR__.'/../bootstrap/app.php';
+
+// 5. Override storage path on the booted application
+$app->useStoragePath('/tmp/storage');
+
+// 6. Handle the incoming request
+$app->handleRequest(Request::capture());
