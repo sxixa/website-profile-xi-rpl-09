@@ -18,3 +18,20 @@ require __DIR__.'/../vendor/autoload.php';
 $app = require_once __DIR__.'/../bootstrap/app.php';
 
 $app->handleRequest(Request::capture());
+
+// Create necessary temporary folders for serverless environment
+$storageDirs = [
+    '/tmp/storage/framework/views',
+    '/tmp/storage/framework/sessions',
+    '/tmp/storage/framework/cache',
+    '/tmp/storage/logs',
+];
+
+foreach ($storageDirs as $dir) {
+    if (!is_dir($dir)) {
+        mkdir($dir, 0755, true);
+    }
+}
+
+// Set storage path to /tmp
+app()->useStoragePath('/tmp/storage');
