@@ -5,20 +5,26 @@ use Illuminate\Http\Request;
 
 define('LARAVEL_START', microtime(true));
 
-// 1. Set environment variable dasar langsung dari PHP (Paling Awal)
+// Force override semua driver ke memory/array SEBELUM bootstrap
 $_ENV['CACHE_STORE'] = 'array';
+$_ENV['CACHE_DRIVER'] = 'array';
 $_ENV['SESSION_DRIVER'] = 'array';
 $_ENV['QUEUE_CONNECTION'] = 'sync';
+$_ENV['BROADCAST_CONNECTION'] = 'log';
 $_ENV['LOG_CHANNEL'] = 'stderr';
 $_ENV['DB_CONNECTION'] = 'sqlite';
+$_ENV['DB_DATABASE'] = '/tmp/database.sqlite';
 
 putenv('CACHE_STORE=array');
+putenv('CACHE_DRIVER=array');
 putenv('SESSION_DRIVER=array');
 putenv('QUEUE_CONNECTION=sync');
+putenv('BROADCAST_CONNECTION=log');
 putenv('LOG_CHANNEL=stderr');
 putenv('DB_CONNECTION=sqlite');
+putenv('DB_DATABASE=/tmp/database.sqlite');
 
-// 2. Buat direktori sementara di /tmp Vercel
+// Buat direktori temporary wajib di Vercel
 $dirs = [
     '/tmp/storage/framework/views',
     '/tmp/storage/framework/sessions',
@@ -33,16 +39,20 @@ foreach ($dirs as $dir) {
     }
 }
 
-// 3. Autoload
+// Buat file sqlite kosong di /tmp agar jika ada package yang memanggil DB, tidak throw error
+if (!file_exists('/tmp/database.sqlite')) {
+    @touch('/tmp/database.sqlite');
+}
+
+// Autoload & Bootstrap
 require __DIR__ . '/../vendor/autoload.php';
 
-// 4. Bootstrap Application
 /** @var Application $app */
 $app = require_once __DIR__ . '/../bootstrap/app.php';
 
-// 5. Override Storage Path
+// Override path
 $app->useStoragePath('/tmp/storage');
 $app->useBootstrapPath('/tmp/bootstrap');
 
-// 6. Jalankan Request
+// Run Request
 $response = $app->handleRequest(Request::capture());
