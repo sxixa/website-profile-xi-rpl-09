@@ -5,33 +5,35 @@ use Illuminate\Http\Request;
 
 define('LARAVEL_START', microtime(true));
 
-// 1. Register Autoloader
-require __DIR__ . '/../vendor/autoload.php';
-
-// 2. Prepare writable storage directories in Vercel /tmp
-$storageDirs = [
+// 1. Buat folder temporary di /tmp Vercel
+$dirs = [
     '/tmp/storage/framework/views',
     '/tmp/storage/framework/sessions',
     '/tmp/storage/framework/cache/data',
     '/tmp/storage/logs',
+    '/tmp/bootstrap/cache',
 ];
 
-foreach ($storageDirs as $dir) {
+foreach ($dirs as $dir) {
     if (!is_dir($dir)) {
-        mkdir($dir, 0755, true);
+        @mkdir($dir, 0755, true);
     }
 }
 
-// 3. Create SQLite DB if used
-$dbFile = '/tmp/database.sqlite';
-if (!file_exists($dbFile)) {
-    touch($dbFile);
-}
+// 2. Set environment variable penting secara programmatic (opsional/backup)
+$_ENV['APP_STORAGE_PATH'] = '/tmp/storage';
+$_ENV['VIEW_COMPILED_PATH'] = '/tmp/storage/framework/views';
 
-// 4. Bootstrap Laravel and override storage path FIRST
+// 3. Autoload
+require __DIR__ . '/../vendor/autoload.php';
+
+// 4. Bootstrap Laravel
 /** @var Application $app */
 $app = require_once __DIR__ . '/../bootstrap/app.php';
-$app->useStoragePath('/tmp/storage');
 
-// 5. Handle Request AFTER storage path is set
-$app->handleRequest(Request::capture());
+// 5. Override Storage & Cache Paths
+$app->useStoragePath('/tmp/storage');
+$app->useBootstrapPath('/tmp/bootstrap');
+
+// 6. Handle Request
+$response = $app->handleRequest(Request::capture());
