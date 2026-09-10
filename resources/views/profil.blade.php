@@ -5,39 +5,11 @@
         <div class="text-center mb-8">
             <h1 class="text-3xl font-bold text-slate-800">Anggota Tim Developer</h1>
             <p class="text-slate-500 mt-2">Kelola informasi anggota tim dan profil kelas XI RPL 1</p>
-            <button onclick="openModal()" class="mt-4 bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition">
-                + Tambah Anggota Profil
-            </button>
         </div>
 
         <div id="cardContainer" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
     </div>
 
-    <!-- Modal Form (Create & Edit) -->
-    <div id="modalForm" class="fixed inset-0 bg-black/50 hidden flex items-center justify-center p-4 z-50">
-        <div class="bg-white rounded-xl shadow-lg p-6 max-w-md w-full border-t-4 border-blue-500">
-            <h2 id="modalTitle" class="text-xl font-bold mb-4 text-slate-800">Tambah Anggota</h2>
-            <form id="profilForm" onsubmit="saveProfil(event)" class="space-y-4">
-                <input type="hidden" id="profilId">
-                <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-1">Nama Lengkap</label>
-                    <input type="text" id="nama" class="w-full border rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-1">Peran / Jabatan</label>
-                    <input type="text" id="peran" class="w-full border rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-1">Deskripsi Tugas</label>
-                    <textarea id="deskripsi" rows="3" class="w-full border rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" required></textarea>
-                </div>
-                <div class="flex justify-end gap-2 pt-2">
-                    <button type="button" onclick="closeModal()" class="px-4 py-2 text-sm border rounded-lg hover:bg-slate-50">Batal</button>
-                    <button type="submit" class="px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700">Simpan</button>
-                </div>
-            </form>
-        </div>
-    </div>
 
     <script>
         let profils = [
