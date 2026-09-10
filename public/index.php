@@ -5,25 +5,14 @@ use Illuminate\Http\Request;
 
 define('LARAVEL_START', microtime(true));
 
-// Determine if the application is in maintenance mode...
-if (file_exists($maintenance = __DIR__.'/../storage/framework/maintenance.php')) {
-    require $maintenance;
-}
-
-// Register the Composer autoloader...
+// 1. Register Autoloader
 require __DIR__.'/../vendor/autoload.php';
 
-// Bootstrap Laravel and handle the request...
-/** @var Application $app */
-$app = require_once __DIR__.'/../bootstrap/app.php';
-
-$app->handleRequest(Request::capture());
-
-// Create necessary temporary folders for serverless environment
+// 2. Prepare writable storage directories in Vercel /tmp
 $storageDirs = [
     '/tmp/storage/framework/views',
     '/tmp/storage/framework/sessions',
-    '/tmp/storage/framework/cache',
+    '/tmp/storage/framework/cache/data',
     '/tmp/storage/logs',
 ];
 
@@ -33,5 +22,16 @@ foreach ($storageDirs as $dir) {
     }
 }
 
-// Set storage path to /tmp
-app()->useStoragePath('/tmp/storage');
+// 3. Create SQLite DB if used
+$dbFile = '/tmp/database.sqlite';
+if (!file_exists($dbFile)) {
+    touch($dbFile);
+}
+
+// 4. Bootstrap Laravel and override storage path FIRST
+/** @var Application $app */
+$app = require_once __DIR__.'/../bootstrap/app.php';
+$app->useStoragePath('/tmp/storage');
+
+// 5. Handle Request AFTER storage path is set
+$app->handleRequest(Request::capture());
