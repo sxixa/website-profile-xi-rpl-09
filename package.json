@@ -4,11 +4,12 @@
     "private": true,
     "type": "module",
     "engines": {
-      "node": "24.x"
+      "node": "18.x"
     },
     "scripts": {
       "build": "vite build",
-      "dev": "vite"
+      "dev": "vite",
+      "start": "vite preview"
     },
     "devDependencies": {
       "@tailwindcss/vite": "^4.0.0",
