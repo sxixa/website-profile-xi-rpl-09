@@ -5,7 +5,16 @@ use Illuminate\Http\Request;
 
 define('LARAVEL_START', microtime(true));
 
-// 1. Buat folder temporary di /tmp Vercel
+// Force fallback jika ENV di Vercel belum terbaca sempurna
+$_ENV['SESSION_DRIVER'] = $_ENV['SESSION_DRIVER'] ?? 'cookie';
+$_ENV['CACHE_STORE'] = $_ENV['CACHE_STORE'] ?? 'array';
+$_ENV['LOG_CHANNEL'] = $_ENV['LOG_CHANNEL'] ?? 'stderr';
+
+putenv('SESSION_DRIVER=cookie');
+putenv('CACHE_STORE=array');
+putenv('LOG_CHANNEL=stderr');
+
+// Buat folder temporary di /tmp Vercel
 $dirs = [
     '/tmp/storage/framework/views',
     '/tmp/storage/framework/sessions',
@@ -20,20 +29,16 @@ foreach ($dirs as $dir) {
     }
 }
 
-// 2. Set environment variable penting secara programmatic (opsional/backup)
-$_ENV['APP_STORAGE_PATH'] = '/tmp/storage';
-$_ENV['VIEW_COMPILED_PATH'] = '/tmp/storage/framework/views';
-
-// 3. Autoload
+// Autoload
 require __DIR__ . '/../vendor/autoload.php';
 
-// 4. Bootstrap Laravel
+// Bootstrap Laravel
 /** @var Application $app */
 $app = require_once __DIR__ . '/../bootstrap/app.php';
 
-// 5. Override Storage & Cache Paths
+// Override Storage & Cache Paths
 $app->useStoragePath('/tmp/storage');
 $app->useBootstrapPath('/tmp/bootstrap');
 
-// 6. Handle Request
+// Handle Request
 $response = $app->handleRequest(Request::capture());
