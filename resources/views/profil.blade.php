@@ -31,10 +31,6 @@
                         <p class="text-sm text-blue-600 font-medium mb-3">${item.peran}</p>
                         <p class="text-sm text-slate-600 leading-relaxed">${item.deskripsi}</p>
                     </div>
-                    <div class="mt-6 pt-4 border-t border-slate-100 flex gap-3 justify-end text-xs font-semibold">
-                        <button onclick="editProfil(${item.id})" class="text-amber-600 hover:underline">Edit</button>
-                        <button onclick="deleteProfil(${item.id})" class="text-red-600 hover:underline">Hapus</button>
-                    </div>
                 `;
                 container.appendChild(card);
             });
@@ -65,5 +61,26 @@
             renderCards();
             closeModal();
         }
+
+        function editProfil(id) {
+            const item = profils.find(p => p.id === id);
+            if (item) {
+                document.getElementById('profilId').value = item.id;
+                document.getElementById('nama').value = item.nama;
+                document.getElementById('peran').value = item.peran;
+                document.getElementById('deskripsi').value = item.deskripsi;
+                document.getElementById('modalTitle').innerText = 'Edit Anggota Profil';
+                openModal();
+            }
+        }
+
+        function deleteProfil(id) {
+            if (confirm('Yakin ingin menghapus anggota ini?')) {
+                profils = profils.filter(p => p.id !== id);
+                renderCards();
+            }
+        }
+
+        renderCards();
     </script>
 @endsection
