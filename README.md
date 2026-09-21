@@ -4,6 +4,7 @@ kolaborasi Git dan GitHub
 1. Muhamad Jibrilian Sadiq Akasya - Project Manager
 2. Synta Awalling - Developer Profil
 3. Taufiq Nur Muhammad Irvan - Developer Anggota
+4. Abdul Jamil Febriansyah - Developer Kontak
 ## Pertanyaan
 [Link URL GitHub](https://github.com/sxixa/website-profile-xi-rpl-09.git)
 
