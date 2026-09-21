@@ -21,7 +21,31 @@ if (!file_exists('/tmp/database.sqlite')) {
     touch('/tmp/database.sqlite');
 }
 
-// 3. Pass serverless environment overrides to PHP
+// 3. Force Fallback Environment Variables directly in PHP
+putenv('APP_ENV=production');
+$_ENV['APP_ENV'] = 'production';
+
+putenv('DB_CONNECTION=sqlite');
+$_ENV['DB_CONNECTION'] = 'sqlite';
+
+putenv('DB_DATABASE=/tmp/database.sqlite');
+$_ENV['DB_DATABASE'] = '/tmp/database.sqlite';
+
+putenv('CACHE_STORE=array');
+$_ENV['CACHE_STORE'] = 'array';
+
+putenv('CACHE_DRIVER=array');
+$_ENV['CACHE_DRIVER'] = 'array';
+
+putenv('SESSION_DRIVER=cookie');
+$_ENV['SESSION_DRIVER'] = 'cookie';
+
+putenv('QUEUE_CONNECTION=sync');
+$_ENV['QUEUE_CONNECTION'] = 'sync';
+
+putenv('LOG_CHANNEL=stderr');
+$_ENV['LOG_CHANNEL'] = 'stderr';
+
 putenv('LARAVEL_STORAGE_PATH=/tmp/storage');
 $_ENV['LARAVEL_STORAGE_PATH'] = '/tmp/storage';
 
