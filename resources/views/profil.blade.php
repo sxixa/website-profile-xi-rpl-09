@@ -65,26 +65,5 @@
             renderCards();
             closeModal();
         }
-
-        function editProfil(id) {
-            const item = profils.find(p => p.id === id);
-            if (item) {
-                document.getElementById('profilId').value = item.id;
-                document.getElementById('nama').value = item.nama;
-                document.getElementById('peran').value = item.peran;
-                document.getElementById('deskripsi').value = item.deskripsi;
-                document.getElementById('modalTitle').innerText = 'Edit Anggota Profil';
-                openModal();
-            }
-        }
-
-        function deleteProfil(id) {
-            if (confirm('Yakin ingin menghapus anggota ini?')) {
-                profils = profils.filter(p => p.id !== id);
-                renderCards();
-            }
-        }
-
-        renderCards();
     </script>
 @endsection
